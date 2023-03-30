@@ -1,9 +1,8 @@
-force_words = ['сила', 'пребудет', 'с', 'тобой', 'Да']
-
-
-force = force_words.append(1)
-force = force_words.pop(-1)
-force = force_words.pop(0)
-force = force_words.insert(0, 'Да')
-force = force_words.insert(-1, 'сила')
-print(force_words)
+from collections import Counter
+id_string = '32 48 2 6 14 58 2 88 9 14 123 48 3 17 42 42 7'
+string = id_string.split()
+id_count = Counter(string)
+string = sorted(string)
+for id, count in id_count.items():
+    if count > 1:
+        print(f'Найден дубликат ID {id}')
