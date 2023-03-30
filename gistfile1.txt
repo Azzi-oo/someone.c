@@ -1,8 +1,7 @@
-from collections import Counter
-id_string = '32 48 2 6 14 58 2 88 9 14 123 48 3 17 42 42 7'
-string = id_string.split()
-id_count = Counter(string)
-string = sorted(string)
-for id, count in id_count.items():
-    if count > 1:
-        print(f'Найден дубликат ID {id}')
+movies_ratings = [4.7, 5.0, 4.3, 4.0]
+movies = ['Матрица', 'Хакеры', 'Трон', 'Кибер']
+
+movies_info = zip(movies, movies_ratings)
+
+for movies_info in movies_info:
+    print(f'{movies_info[0]}: {movies_info[1]}')
