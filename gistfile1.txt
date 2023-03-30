@@ -1,7 +1,27 @@
-movies_ratings = [4.7, 5.0, 4.3, 4.0]
-movies = ['Матрица', 'Хакеры', 'Трон', 'Кибер']
 
-movies_info = zip(movies, movies_ratings)
+recommended_movies = {
+    'Хенкок': {'rating': 4.5, 'review': 'Смотреть можно'},
+    'Матрица': {'rating': 4.7, 'review': 'Фильм крут'},
+    'Кибер': {'rating': 2.5, 'review': 'Так себе киношечка'},
+    'Трон': {'rating': 3.8, 'review': 'Так себе киношечка'},
+    'Мстители': {'rating': 4.7, 'review': 'Фильм крут'},
+    'Хакеры':  {'rating': 4.5, 'review': 'Смотреть можно'}
+}
+favorite_movies = {}
+low_rated_movies = []
 
-for movies_info in movies_info:
-    print(f'{movies_info[0]}: {movies_info[1]}')
+for movie, info in recommended_movies.items():
+    rating = info['rating']
+    review = info['review']
+    print(f'У фильма "{movie}" {'' if rating >= 4 else 'низкий '}рейтинг: {rating}. Отзыв: «{review}».')
+    if rating >= 4:
+        favorite_movies[movie] = info
+        print(f"Фильм добавлен в избранное.")
+    else:
+        low_rated_movies.append(movie)
+
+for movie in low_rated_movies:
+    del recommended_movies[movie]
+
+print(favorite_movies)
+print(recommended_movies)
