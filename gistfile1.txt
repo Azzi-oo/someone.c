@@ -1,8 +1,7 @@
-def get_mean(values):
-    return sum(values) / len(values) # Место для вашего кода
-
-# Список значений для теста
-num_lst = [3, 6, 5, 7, 9, 1]
-mean = get_mean(num_lst)
-# Тут вызов функции.
-print(round(mean, 1))
+def test_range(): # Укажите параметры
+    string = set{} # место для вашего кода
+    for i in range():
+        
+start = 4
+end = 12
+print(test_range(start, end, 5, 16, 32, 6, 7, 1))
