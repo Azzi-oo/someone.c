@@ -1,13 +1,14 @@
 def test_range(start, end, *args):
     in_range = []
-    for num in args:
-        if num in range(start, end + 1):
-            in_range.append(num)
+    for i in range(len(args)):
+        if args[i] < start or > end:
+            print(f'«Число {num} за границами диапазона»)
+            
         else:
-            pass
+            in_range.append(num)
             
     return in_range
 
 start = 4
 end = 12
-result = test_range(start, end, 5, 16, 32, 6, 7 , 1)
+print(test_range(start, end, 5, 16, 32, 6, 7 , 1))
