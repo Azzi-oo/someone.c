@@ -1,7 +1,13 @@
-def test_range(): # Укажите параметры
-    string = set{} # место для вашего кода
-    for i in range():
-        
+def test_range(start, end, *args):
+    in_range = []
+    for num in args:
+        if num in range(start, end + 1):
+            in_range.append(num)
+        else:
+            pass
+            
+    return in_range
+
 start = 4
 end = 12
-print(test_range(start, end, 5, 16, 32, 6, 7, 1))
+result = test_range(start, end, 5, 16, 32, 6, 7 , 1)
