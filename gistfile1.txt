@@ -1,4 +1,4 @@
-import datetime # Импортируйте необходимые модули
+import datetime as dt # Импортируйте необходимые модули
 
 FORMAT = '%H:%M:%S' # Запишите формат полученного времени.
 WEIGHT = 75  # Вес.
@@ -96,12 +96,13 @@ def accept_package(data):
 
     if check_correct_data(data) == False: # Если функция проверки пакета вернет False
         return 'Некорректный пакет'
-    pack_time, pack_step = data
+    pack_time, pack_steps = data
     
     # Распакуйте полученные данные.
     pack_time = dt.datetime.strptime(pack_time,FORMAT).time() # Преобразуйте строку с временем в объект типа time.
     time = pack_time
     steps = pack_steps
+    current_time_1 = str(time)
     currrent_time = float(current_time_1[1]) + (float(current_time_1[3:5]) / 60)
     if check_correct_time(time) == False: # Если функция проверки значения времени вернет False
         return 'Некорректное значение времени'
