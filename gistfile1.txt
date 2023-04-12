@@ -1,129 +1,37 @@
-import datetime as dt # Импортируйте необходимые модули
+TEST_DATA : list[tuple] = [
+    (44, 'success', True),
+    (16, 'failure', True),
+    (4, 'success', False),
+    (21, 'failure', False),
+]
 
-FORMAT = '%H:%M:%S' # Запишите формат полученного времени.
-WEIGHT = 75  # Вес.
-HEIGHT = 175  # Рост.
-K_1 = 0.035  # Коэффициент для подсчета калорий.
-K_2 = 0.029  # Коэффициент для подсчета калорий.
-STEP_M = 0.65  # Длина шага в метрах.
-
-storage_data = {}  # Словарь для хранения полученных данных.
-
-
-def check_correct_data(data):
-    """Проверка корректности полученного пакета."""
-    if len(data) != 2:
-        # Если длина пакета отлична от 2
-        return False # или один из элементов пакета имеет пустое значение -
-    elif data[0] is None:
-        return False
-    elif data[1] is None:
-        return False
-    else:
-        return True # функция вернет False, иначе - True.
+BONUS = 1.1
+ANTIBONUS = 0.8
 
 
-def check_correct_time(time):
-    """Проверка корректности параметра времени."""
-    list_1 = []
-    for i in storage_data.keys():
-        list_1.append(dt.datetime.strptime(i, FORMAT).time())
-    # Если словарь для хранения не пустой
-    # и значение времени, полученное в аргументе,
-    # меньше или равно самому большому значению ключа в словаре,
-    if storage_data and time <= max(list_1):
-        return False
-    else:
-        return True
-    # функция вернет False.
-    # Иначе - True 
+def add_rep(current_rep, rep_points, buf_effect):
+    current_rep += rep_points
+    if buf_effect:
+        return current_rep * BONUS
+    return current_rep
 
 
-def get_step_day(steps):
-    """Получить количество пройденных шагов за этот день."""
-    count = 0
-    for lag in storage_data.values():
-        count += lag
-    count = count + steps
-    return count # Посчитайте все шаги, записанные в словарь storage_data,
-    # прибавьте к ним значение из последнего пакета
-    # и верните  эту сумму.
-def get_distance(steps):
-    """Получить дистанцию пройденного пути в км."""
-    
-    dist = get_step_day(day_steps) * STEP_M / 1000 # Посчитайте дистанцию в километрах,
-    # исходя из количества шагов и длины шага.
-    return dist
+def remove_rep(current_rep, rep_points, debuf_effect):
+    current_rep -= rep_points
+    if debuf_effect:
+        return current_rep * ANTIBONUS
+    return current_rep
 
-def get_spent_calories(dist, current_time):
-    """Получить значения потраченных калорий."""
-     # В уроке «Последовательности» вы написали формулу расчета калорий.
-    
-    mean_speed = dist / current_time
-    current_time = hours * 60
-    spent_calories = (K_1 * WEIGHT + (mean_speed**2 / HEIGHT) * 0.029 * WEIGHT) * minutes # Перенесите её сюда и верните результат расчётов.
-    # Для расчётов вам потребуется значение времени; 
-    # получите его из объекта current_time;
-    # переведите часы и минуты в часы, в значение типа float.
-    return spent_calories
-def get_achievement(dist):
-    """Получить поздравления за пройденную дистанцию."""
-    if dist < 2:
-        return "Лежать тоже полезно. Главное - участие, а не победа!"
-    if dist > 2:
-        return "Завтра наверстаем!"
-    if dist > 3.9:
-        return "Неплохо! День был продуктивный"
-    if dist > 6.5:
-        return "Отличный результат! Цель достигнута."
-    else:
-        return "Ух ты! Ты сегодня далеко продвинулся"
-    # В уроке «Строки» вы описали логику
-    # вывода сообщений о достижении в зависимости
-    # от пройденной дистанции.
-    # Перенесите этот код сюда и замените print() на return.
-def show_message(time, day_steps, dist, spent_calories, achievement): # Место для функции show_message.
-    """Выводит сообщение об успехах"""
-    print(f'''
-Время: {str(time)}
-Количество шагов за сегодня: {counts}
-Дистанция составила {dist:.2f} км.
-Вы сожгли {spent_calories:.2f} ккал.
-{achievement}
-''')
-def accept_package(data):
-    """Обработать пакет данных."""
 
-    if check_correct_data(data) == False: # Если функция проверки пакета вернет False
-        return 'Некорректный пакет'
-    pack_time, pack_steps = data
-    
-    # Распакуйте полученные данные.
-    pack_time = dt.datetime.strptime(pack_time,FORMAT).time() # Преобразуйте строку с временем в объект типа time.
-    time = pack_time
-    steps = pack_steps
-    current_time_1 = str(time)
-    currrent_time = float(current_time_1[1]) + (float(current_time_1[3:5]) / 60)
-    if check_correct_time(time) == False: # Если функция проверки значения времени вернет False
-        return 'Некорректное значение времени'
+def main(duel_res):
+    current_rep = 0.0
+    for rep, result, effect in duel_res:
+        if result == 'success':
+            current_rep = add_rep(current_rep, rep, effect)
+        if result == 'failure':
+            current_rep = remove_rep(current_rep, rep, effect)
+    return f'После {len(duel_res)} поединков, репутация — {current_rep:.3f}.'
 
-    day_steps = get_step_day(data[1]) # Запишите результат подсчёта пройденных шагов.
-    dist = get_distance(day_steps) # Запишите результат расчёта пройденной дистанции.
-    spent_calories = get_spent_calories(dist, current_time)# Запишите результат расчёта сожжённых калорий.
-    achievement = get_achievement(dist) # Запишите выбранное мотивирующее сообщение.
-    show_message(dist, spent_calories)
-    storage_data[pack_time] = day_steps # Добавьте новый элемент в словарь storage_data.
-    return storage_data # Верните словарь storage_data.
-          
-# Данные для самопроверки.Не удаляйте их.
-package_0 = ('2:00:01', 505)
-package_1 = (None, 3211)
-package_2 = ('9:36:02', 15000)
-package_3 = ('9:36:02', 9000)
-package_4 = ('8:01:02', 7600)
 
-accept_package(package_0)
-accept_package(package_1)
-accept_package(package_2)
-accept_package(package_3)
-accept_package(package_4)
+# Тестовый вызов функции main.
+print(main(TEST_DATA))
