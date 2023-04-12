@@ -1,37 +1,28 @@
-TEST_DATA : list[tuple] = [
-    (44, 'success', True),
-    (16, 'failure', True),
-    (4, 'success', False),
-    (21, 'failure', False),
-]
+from math import sqrt
 
-BONUS = 1.1
-ANTIBONUS = 0.8
+MESSAGE = "Добро пожаловать в самую лучшую программу для вычисления квадратного корня из заданного числа"
 
+def calculate_square_root(number):
+    """Вычисляет квадратный корень"""
+    return sqrt(number)
 
-def add_rep(current_rep, rep_points, buf_effect):
-    current_rep += rep_points
-    if buf_effect:
-        return current_rep * BONUS
-    return current_rep
+def calc(your_number):
+    """
+    Вычисляет квадратный корень из заданного числа и выводит результат на экран
 
+    :param your_number: число, из которого нужно вычислить квадратный корень
+    :type your_number: int или float
+    """
+    if not isinstance(your_number, (int, float)):
+        raise TypeError("Number must be a number")
+    
+    if your_number <= 0:
+        raise ValueError("Number must be positive")
+     
+    square_root = calculate_square_root(your_number)
+    print(f"Мы вычислили квадратный корень из введённого вами числа.")
+    print(f"Это будет: {square_root}")
+    
 
-def remove_rep(current_rep, rep_points, debuf_effect):
-    current_rep -= rep_points
-    if debuf_effect:
-        return current_rep * ANTIBONUS
-    return current_rep
-
-
-def main(duel_res):
-    current_rep = 0.0
-    for rep, result, effect in duel_res:
-        if result == 'success':
-            current_rep = add_rep(current_rep, rep, effect)
-        if result == 'failure':
-            current_rep = remove_rep(current_rep, rep, effect)
-    return f'После {len(duel_res)} поединков, репутация — {current_rep:.3f}.'
-
-
-# Тестовый вызов функции main.
-print(main(TEST_DATA))
+print(MESSAGE)
+calc(25.5)
