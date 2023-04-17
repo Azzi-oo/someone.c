@@ -8,14 +8,14 @@ class Quest:
         self.name = name
         self.description = description
         self.goal = goal
-        self.start_time =  None # Допишите два свойства класса.
-        self.end_time = None
+        self.start_time = start_time # Допишите два свойства класса.
+        self.end_time = end_time
         
         
     def accept_quest(self):
         self.start_time = dt.datetime.now()
         if self.end_time:
-            return ('С этим испытанием вы уже справились.')# Напишите методы приема и сдачи квеста.
+            return ('С этим испытанием вы уже справились.') # Напишите методы приема и сдачи квеста.
         else:
             return (f'Начало "{quest_name}" положено.')
     
@@ -27,7 +27,7 @@ class Quest:
         completion_time = self.end_time - self.start_time
         return (f'Квест "{self.name}" окончен.'
                 f' Время выполнения квеста: {completion_time}')
-
+        
 quest_name = 'Сбор пиксельники'
 quest_goal = 'Соберите 12 ягод пиксельники.'
 quest_description = '''
