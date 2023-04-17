@@ -1,28 +1,44 @@
-from math import sqrt
+import datetime 
 
-MESSAGE = "Добро пожаловать в самую лучшую программу для вычисления квадратного корня из заданного числа"
+# Импортируйте time.
+import time
 
-def calculate_square_root(number):
-    """Вычисляет квадратный корень"""
-    return sqrt(number)
-
-def calc(your_number):
-    """
-    Вычисляет квадратный корень из заданного числа и выводит результат на экран
-
-    :param your_number: число, из которого нужно вычислить квадратный корень
-    :type your_number: int или float
-    """
-    if not isinstance(your_number, (int, float)):
-        raise TypeError("Number must be a number")
+class Quest:
+    def __init__(self, name, description, goal, start_time=None, end_time=None):
+        self.name = name
+        self.description = description
+        self.goal = goal
+        self.start_time =  None # Допишите два свойства класса.
+        self.end_time = None
+        
+        
+    def accept_quest(self):
+        self.start_time = dt.datetime.now()
+        if self.end_time:
+            return ('С этим испытанием вы уже справились.')# Напишите методы приема и сдачи квеста.
+        else:
+            return (f'Начало "{quest_name}" положено.')
     
-    if your_number <= 0:
-        raise ValueError("Number must be positive")
-     
-    square_root = calculate_square_root(your_number)
-    print(f"Мы вычислили квадратный корень из введённого вами числа.")
-    print(f"Это будет: {square_root}")
-    
+        
+    def pass_quest(self):
+        if not self.start_time:
+            return 'Нельзя завершить то, что не имеет начала!'
+        self.end_time = datetime.datetime.now()
+        completion_time = self.end_time - self.start_time
+        return (f'Квест "{self.name}" окончен.'
+                f' Время выполнения квеста: {completion_time}')
 
-print(MESSAGE)
-calc(25.5)
+quest_name = 'Сбор пиксельники'
+quest_goal = 'Соберите 12 ягод пиксельники.'
+quest_description = '''
+В древнем лесу Кодоборье растёт ягода "пиксельника".
+Она нужна для приготовления целебных снадобий.
+Соберите 12 ягод пиксельники.'''
+
+new_quest = Quest(quest_name, quest_description, quest_goal) 
+
+print(new_quest.pass_quest())
+print(new_quest.accept_quest())
+time.sleep(3)
+print(new_quest.pass_quest())
+print(new_quest.accept_quest())
