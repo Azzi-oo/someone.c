@@ -1,65 +1,134 @@
-class Human:
-    def __init__(self, name):
-        self.name = name
+class InfoMessage:
+    """Информационное сообщение о тренировке."""
+    
+    def __init__(self, training_type, duration, distance, speed, calories):
+         self.training_type = training_type
+         self.duration = duration
+         self.distance = distance
+         self.speed = speed
+         self.calories = calories
 
-    # ответ по умолчанию для всех одинаковый, можно 
-    # доверить его родительскому классу
-    def answer_question(self, question):
-        print('Очень интересный вопрос! Не знаю.')
+    def get_message(self):
+        return f'Тип тренировки: {self.training_type}; Длительность: {self.duration} ч.;'
+               f'Дистанция: {self.distance} км; Ср.скорость: {self.speed} км/ч;'
+               f'Потрачено ккал: {self.calories}.'
+    
+    
+class Training:
+    """Базовый класс тренировки."""
+
+    LEN_STEP = 0.65
+    M_IN_KM = 1000
 
 
-class Student(Human):   
-    #  метод ask_question() принимает параметр someone:
-    #  это объект, экземпляр класса Curator, Mentor или CodeReviewer,
-    #  которому Student задаёт вопрос; 
-    #  параметр question — это просто строка
-    #  имя объекта и текст вопроса задаются при вызове метода ask_question
-    def ask_question(self, someone, question):
-        # напечатайте на экран вопрос в нужном формате
-        print(f'{someone.name}, {question}')
-        someone.answer_question(question) # запросите ответ на вопрос у someone
-        print()  # этот print выводит разделительную пустую строку	
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 ) -> None:
+        self.action = action
+        self.duration = duration
+        self.weight = weight
 
 
-class Curator(Human):
-    def answer_question(self, question):
-        if 'груст' in question:
-            print('Отдохни и возвращайся с вопросами по теории.')
-        else:
-            super().answer_question(question) # здесь нужно проверить, пришёл куратору знакомый вопрос или нет
-        # если да - ответить на него
-        # если нет - вызвать метод answer_question() у родительского класса
+    def get_distance(self) -> float:
+        """Получить дистанцию в км."""
+        return self.action * self.LEN_STEP / self.M_IN_KM
 
-class CodeReviewer(Human):
-    def answer_question(self, question):
-        if question == 'когда каникулы?':
-            print('Очень интересный вопрос! Не знаю.')
-        elif 'проект' in question:
-            print('О, вопрос про проект, это я люблю.')
-        else:
-            super().answer_question(question) # объявите и реализуйте классы CodeReviewer и Mentor
-            
-class Mentor(Human):
-    def answer_question(self, question):
-        if question == 'мне грустненько, что делать?':
-            print('Отдохни и возвращайся с вопросами по теории.')
+
+    def get_mean_speed(self) -> float:
+        """Получить среднюю скорость движения."""
+        return self.action / self.duration
+    
+
+    def get_spent_calories(self) -> float:
+        """Получить количество затраченных калорий."""
+        pass
+
+
+    def show_training_info(self) -> InfoMessage:
+        """Вернуть информационное сообщение о выполненной тренировке."""
+        message = InfoMessage(self.__clas__.__name__,
+                              self.duration,
+                              self.get_distance(),
+                              self.get_mean_speed(), self.get_spent_calories())
+        return message
+
+
+class Running(Training):
+    """Тренировка: бег."""
+
+    CALORIES_MEAN_SPEED_MULTIPLIER = 18
+    CALORIES_MEAN_SPEED_SHIFT = 1.79
+
+    def get_spent_calories(self) -> float:
+        calories = ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SHIFT)
+                * self.weight / self.M_IN_KM * self.duration)
+
+
+class SportsWalking(Training):
+    """Тренировка: спортивная ходьба."""
+    
+    def __init__(self, action: int,
+                 duration: float,
+                 weight: float,
+                 height: float) -> None:
+        super().__init__(action, duration, weight)
+        self.height = height
+
+    def get_spent_calories(self) -> float:
+        return ((0.035 * self.weight + (self.get_mean_speed()**2 / self.height)
+                  * 0.029 * self.weight) * self.duration)
+
+
+class Swimming(Training):
+    """Тренировка: плавание."""
+
+    def __init__(self, action: int,
+                 duration: float,
+                 weight: float,
+                 length_pool: int,
+                 count_pool: int) -> None:
+        super().__init__(action, duration, weight)
+        self.length_pool = length_pool
+        self.count_pool = count_pool
+
+    def get_spent_calories(self) -> float:
+        calories_to_swim = (self.speed + 1.1) * 2 * self.weight * self.duration
+
+
+    def get_mean_speed(self) -> float:
+        speed_to_swim = self.length_pool * self.count_pool / self.M_IN_KM / self.duration
         
-        if 'как устроиться работать питонистом' in question:
-            print('Сейчас расскажу.')
-        else:
-            super().answer_question(question)
+
+def read_package(workout_type: str, data: list) -> Training:
+    """Прочитать данные полученные от датчиков."""
+    woкkouts = {
+        'SWM': Swimming,
+        'RUN': Running,
+        'WLK': Walking,
+    }
+    WorkoutClass = workouts[workout_type]
+    training = WorkoutClass(*data)
+    return training
 
 
-# следующий код менять не нужно, он работает, мы проверяли
-student1 = Student('Тимофей')
-curator = Curator('Марина')
-mentor = Mentor('Ира')
-reviewer = CodeReviewer('Евгений')
-friend = Human('Виталя')
+def main(training: Training) -> None:
+    """Главная функция."""
 
-student1.ask_question(curator, 'мне грустненько, что делать?')
-student1.ask_question(mentor, 'мне грустненько, что делать?')
-student1.ask_question(reviewer, 'когда каникулы?')
-student1.ask_question(reviewer, 'что не так с моим проектом?')
-student1.ask_question(friend, 'как устроиться на работу питонистом?')
-student1.ask_question(mentor, 'как устроиться работать питонистом?')
+
+def show_training_info(InfoMessage):
+    info = training.show_training_info()
+    print()
+
+
+if __name__ == '__main__':
+    packages = [
+        ('SWM', [720, 1, 80, 25, 40]),
+        ('RUN', [15000, 1, 75]),
+        ('WLK', [9000, 1, 75, 180]),
+    ]
+
+    for workout_type, data in packages:
+        training = read_package(workout_type, data)
+        main(training)
