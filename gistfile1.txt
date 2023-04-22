@@ -20,10 +20,10 @@ class InfoMessage:
 
     def get_message(self) -> str:
         return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {self.duration:.2f} ч.; '
-                f'Дистанция: {self.distance:.2f} км; '
-                f'Ср.скорость: {self.speed:.2f} км/ч; '
-                f'Потрачено ккал: {self.calories:.2f}.')
+                f'Длительность: {self.duration:.3f} ч.; '
+                f'Дистанция: {self.distance:.3f} км; '
+                f'Ср. скорость: {self.speed:.3f} км/ч; '
+                f'Потрачено ккал: {self.calories:.3f}.')
 
 
 class Training:
@@ -49,7 +49,7 @@ class Training:
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
-        self.speed: float = self.distance / self.duration
+        self.speed: float = self.distance * SEC_IN_HOUR / self.duration
         return self.speed
 
     def get_spent_calories(self) -> float:
@@ -92,7 +92,7 @@ class SportsWalking(Training):
         b1: float = ((self.distance * M_IN_KM)
                      / (self.duration * SEC_IN_HOUR))
         self.calories = (((a * self.weight + (b1**2 / self.height)
-                          * b * self.weight) * (self.duration * MIN_IN_HOUR)))
+                          * b * self.weight) * (self.duration * MIN_IN_HOUR * 60)))
         return self.calories
 
 
