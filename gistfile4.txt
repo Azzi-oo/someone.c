@@ -1,0 +1,27 @@
+from aiogram import Bot, Dispatcher, types, executor
+
+
+TOKEN = '6198687861:AAHXYEh4DacXEdslG_NFfVjan_fQHTs8HuE'
+
+bot = Bot(TOKEN)
+dp = Dispatcher(bot)
+
+
+@dp.message_handler()
+async def count(message: types.Message):
+    await message.answer(text=str(message.text.count('👋🏻')))
+# @dp.message_handler(commands=['give'])
+# async def send_sticker(message: types.Message):
+#    await message.answer("Смотри какой Хасбик ☝🏼  ")
+#    await bot.send_sticker(message.from_user.id, sticker="CAACAgIAAxkBAAEJDE9kac-NK7VIqPzKSn_KczvohaCJRwAC1xgAAm4m4UsFYy3CmOv8qy8E")
+
+#@dp.message_handler()
+#async def send_sticker(message: types.Message):
+#    if message.text == '☝🏼':
+#        await message.answer('🐺')
+
+#    await message.answer("")
+
+
+if __name__ == "__main__":
+    executor.start_polling(dp)
